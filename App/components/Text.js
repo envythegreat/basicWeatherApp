@@ -1,6 +1,5 @@
 import React from "react";
 import { Text, StyleSheet } from "react-native";
-import { FontDisplay } from "expo-font";
 
 const styles = StyleSheet.create({
   base: {
@@ -22,7 +21,6 @@ const styles = StyleSheet.create({
   titleWeather: {
     textAlign: "center",
     fontSize: 40,
-    // fontWeight: "700",
     marginTop: 100
   }
 });

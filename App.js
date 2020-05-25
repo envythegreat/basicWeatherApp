@@ -9,7 +9,7 @@ import ScreenParams from './App/screens/screenParams';
 const AppStack = createStackNavigator(
   {
     Detail: ScreenParams.DetailScreen,
-    // Search: ScreenParams.SearchScreen,
+    Search: ScreenParams.SearchScreen
   },
   {
     mode: 'modal',

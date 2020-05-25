@@ -5,7 +5,6 @@ import { TouchableOpacity, Image, StatusBar } from 'react-native';
 
 const headerStyles = {
     backgroundColor: 'transparent',
-    // borderBottomColor: '#3145b7',
     height: 100,
 }
 
@@ -33,23 +32,23 @@ export default ScreenParams = {
     DetailScreen : {
         screen: Detail,
         navigationOptions: ({ navigation }) => ({
-          // headerTitle: navigation.getParam('title', 'Weather Details'),
-          // headerRight: () => (
-          //   <React.Fragment>
-          //     <StatusBar barStyle="light-content" />
-          //     <HeaderRightButton
-          //       icon={require('../assets/look.png')}
-          //       onPress={() => navigation.navigate('Search')}
-          //       style={{width: 35, height:35}}
-          //     />
-          //   </React.Fragment>
-          // ),
+          headerTitle: navigation.getParam('title', 'Weather Details'),
+          headerRight: () => (
+            <React.Fragment>
+              <StatusBar barStyle="light-content" />
+              <HeaderRightButton
+                icon={require('../assets/look.png')}
+                onPress={() => navigation.navigate('Search')}
+                style={{width: 35, height:35}}
+              />
+            </React.Fragment>
+          ),
           headerLeft: () => (
             <React.Fragment>
                 <StatusBar barStyle="light-content" />
                 <HeaderRightButton
                   icon={require('../assets/position.png')}
-                  // onPress={() => navigation.navigate('Search')}
+                  onPress={() => navigation.navigate('Search')}
                   style={{marginLeft: 10, width: 30, height:30}}
                 />
               </React.Fragment>

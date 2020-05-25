@@ -2,12 +2,14 @@ import React , {Component} from 'react';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import { ScrollView, SafeAreaView, View,Image } from 'react-native';
-import {H1, TitleWeather, P, H2} from '../components/Text'
-import { BasicRow } from '../components/rows';
-import { format } from 'date-fns';
-import weatherApi from '../util/weatherApi'
-import {Container} from '../components/Container'
-import { WeatherIcon } from '../components/WeatherIcon';
+
+
+import WeatherHeader from '../components/WeatherHeader';
+import WeatherForecast from '../components/WeatherForecast';
+import { groupForecastByDay, firstLetter } from '../util/function';
+import weatherApi from '../util/weatherApi';
+import {Container} from '../components/Container';
+
 
 
 class Detail extends Component {
@@ -33,14 +35,11 @@ class Detail extends Component {
 		});
 	}
 
-	firstLetter = (text) =>  {
-		return text.charAt(0).toUpperCase() + text.slice(1);
-	}
-
+	
+	// Get Current Weather Based on the Coords or Zipcode
 	getCurrentWeather = ({ zipcode, coords}) => {
 		weatherApi('/weather', {zipcode, coords})
 			.then(response => {
-				// this.props.navigation.setParams({ title: response.name });
 				this.setState({
 					currentWeather: response,
 					loadingCurrentWeather: false,
@@ -51,12 +50,13 @@ class Detail extends Component {
 			});
 	}
 
+	// Get Current Forecast Based on the Coords or Zipcode
 	getCurrentForecast = ({ zipcode, coords}) => {
 		weatherApi('/forecast', {zipcode, coords})
 			.then(response => {
 				this.setState({
 					loadingForecast: false,
-					forecast: this.groupForecastByDay(response.list),
+					forecast: groupForecastByDay(response.list),
 				})
 			})
 			.catch(err => {
@@ -64,112 +64,31 @@ class Detail extends Component {
 			});
 	}
 
-groupForecastByDay (list) {
-  const data = {};
 
-  list.forEach(item => {
-    const [day] = item.dt_txt.split(' ');
-    if (data[day]) {
-      if (data[day].temp_max < item.main.temp_max) {
-        data[day].temp_max = item.main.temp_max;
-      }
 
-      if (data[day].temp_min > item.main.temp_min) {
-        data[day].temp_min = item.main.temp_min;
-      }
-    } else {
-      data[day] = {
-        temp_min: item.main.temp_min,
-        temp_max: item.main.temp_max,
-      };
+
+	render() {
+
+		if(this.state.loadingCurrentWeather || this.state.loadingForecast) {
+			return(
+				<Container>
+					<Image source={require('../assets/loading.gif')} style={{alignSelf: 'center', width:200, height:200, marginTop: 250}} />
+				</Container>
+			);
 		}
-		data[day].weatherCondidition = item.weather[0].main
-		data[day].weatherIcon = item.weather[0].icon
-  });
+			
+		const { weather, main, name } = this.state.currentWeather;
 
-  const formattedList = Object.keys(data).map(key => ({
-    day: key,
-    ...data[key],
-  }));
-  return formattedList;
-};
-
-
-render() {
-
-	if(this.state.loadingCurrentWeather || this.state.loadingForecast) {
-		return(
+		return (
 			<Container>
-				<Image source={require('../assets/loading.gif')} style={{alignSelf: 'center', width:200, height:200, marginTop: 250}} />
-			</Container>
-		);
-	}
-		
-	const { weather, main, name } = this.state.currentWeather;
-			// console.log(this.state.currentWeather)
-	return (
-		<Container>
-			<ScrollView>
-				<SafeAreaView>
-					{/** Weather information */}
-					<TitleWeather> { this.firstLetter(name) } </TitleWeather>
-					<H2> { this.firstLetter(weather[0].description) } </H2>
-					<H1>{`${Math.round(main.temp)}`}</H1>
-					<BasicRow>
-						<H2>{`Humidity : ${main.humidity}%`}</H2>
-					</BasicRow>
-					<BasicRow>
-						<H2>{`Low : ${Math.round(main.temp_min)}°`}</H2>
-						<H2>{`High : ${Math.round(main.temp_max)}°`}</H2>
-					</BasicRow>
-						{/** End Weather information */}
-
+				<ScrollView>
+					<SafeAreaView>
+						<WeatherHeader weather={weather} name={name} main={main} firstLetter={firstLetter} />
 						<View style={{	borderBottomColor: 'snow',borderBottomWidth: 1,width: '85%',marginTop: 20,alignSelf: 'center',}}/>
-							
-						{/** Forecast information */}
-							<View style={{ paddingHorizontal: 10, marginTop: 20 }}>
-								<BasicRow style={{ justifyContent: 'space-between' }} >
-									<P style={{ fontWeight: '700' }} >Date</P>
-
-									<View style={{ flexDirection: 'row' }}>
-										{/* <P style={{ fontWeight: '700', marginLeft: 20 }} >Icon</P> */}
-										{/* <P style={{ fontWeight: '700', marginLeft: 50 }} >Main</P> */}
-									</View>
-
-									<View style={{ flexDirection: 'row' }}>
-										<P style={{ fontWeight: '700' }}> Max </P>
-										<P style={{ fontWeight: '700', marginLeft: 10 }}>Low</P>
-									</View>
-
-								</BasicRow>
-
-								{this.state.forecast.map(day => (
-									<BasicRow
-										key={day.day}
-										style={{ justifyContent: 'space-between' }}
-									>
-									<P>{format(new Date(day.day), 'EE, d')}</P>
-									<View style={{ flexDirection: 'row' }}>
-										<P style={{ fontWeight: '700', marginRight:20 }} >
-											<WeatherIcon icon={day.weatherIcon} />
-										</P>
-										<P style={{ fontWeight: '700', marginLeft: 32 }} >
-											{day.weatherCondidition}
-										</P>
-									</View>
-									<View style={{ flexDirection: 'row' }}>
-										<P style={{ fontWeight: '700', marginRight: 10 }}>
-											{Math.round(day.temp_max)}
-										</P>
-										<P style={{marginLeft: 15 }} >{Math.round(day.temp_min)}</P>
-									</View>
-									</BasicRow>
-								))}
-							</View>
-						{/** End Forecast information */}
-				</SafeAreaView>
-			</ScrollView>
-		</Container>
+						<WeatherForecast forecast={this.state.forecast} />
+					</SafeAreaView>
+				</ScrollView>
+			</Container>
 		);
 	}
 }
