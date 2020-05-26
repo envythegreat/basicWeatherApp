@@ -8,7 +8,7 @@ const weatherApi = (path, { zipcode, coords }) => {
 		data = `lat=${coords.latitude}&lon=${coords.longitude}`;
 	}
 	return fetch(
-		`https://api.openweathermap.org/data/2.5/${path}?${data}&appid=${ApiKey}&units=metric`
+		`https://api.openweathermap.org/data/2.5/${path}?lat=${coords.latitude}&lon=${coords.longitude}&appid=${ApiKey}&units=metric`
 	)
 	.then(response => response.json())
 }

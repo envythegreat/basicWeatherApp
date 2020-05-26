@@ -35,6 +35,14 @@ class Detail extends Component {
 		});
 	}
 
+	componentDidUpdate(prevProps) {
+		const oldCoords = prevProps.navigation.getParam('coords')
+		const newCoords = this.props.navigation.getParam('coords');
+		if(newCoords && oldCoords !== newCoords) {
+			this.getCurrentWeather({ coords: newCoords });
+			this.getCurrentForecast({ coords: newCoords });
+		}
+	}
 	
 	// Get Current Weather Based on the Coords or Zipcode
 	getCurrentWeather = ({ zipcode, coords}) => {
@@ -78,12 +86,13 @@ class Detail extends Component {
 		}
 			
 		const { weather, main, name } = this.state.currentWeather;
-
+		// console.log(this.props.navigation.getParam('coords'))
+		// console.log(Date.now())
 		return (
 			<Container>
 				<ScrollView>
 					<SafeAreaView>
-						<WeatherHeader weather={weather} name={name} main={main} firstLetter={firstLetter} />
+						<WeatherHeader weather={weather} name={name} main={main} firstLetter={firstLetter}  cityTitle={this.props.navigation.getParam('name')}/>
 						<View style={{	borderBottomColor: 'snow',borderBottomWidth: 1,width: '85%',marginTop: 20,alignSelf: 'center',}}/>
 						<WeatherForecast forecast={this.state.forecast} />
 					</SafeAreaView>

@@ -3,11 +3,13 @@ import {H1, TitleWeather, H2} from './Text'
 import { BasicRow } from './rows';
 import { View } from 'native-base';
 
-const WeatherHeader = ({name, weather, main, firstLetter}) => {
+const WeatherHeader = ({name, weather, main, firstLetter, cityTitle}) => {
+	const City = cityTitle;
 	return (
 		<>	
 			<View>
-				<TitleWeather> { firstLetter(name) } </TitleWeather>
+
+			{name ? <TitleWeather> { firstLetter(name) } </TitleWeather> : <TitleWeather> { firstLetter(City) } </TitleWeather> }
 			</View>
 			<View>
 				<H2> { firstLetter(weather[0].description) } </H2>

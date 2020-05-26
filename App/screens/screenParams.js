@@ -72,16 +72,13 @@ export default ScreenParams = {
               <HeaderRightButton
                 icon={require('../assets/close.png')}
                 onPress={() => navigation.pop()}
-                style={{tintColor: '#aaa',}}
+                style={{tintColor: '#000',}}
               />
             </React.Fragment>
           ),
           headerLeft: null,
           headerStyle: headerStyles,
-          headerTransparent: {
-            position: 'absolute',
-          },
-          headerTintColor: '#aaa',
+          headerTintColor: '#000',
         }),
       }
       
