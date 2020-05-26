@@ -29,3 +29,8 @@ export const  groupForecastByDay =  (list) => {
   }));
   return formattedList;
 };
+
+export const  getSunsetRise = (time) => {
+  let date =  new Date(time*1000);
+  return `${date.getHours()}:${date.getMinutes()}`
+}

@@ -2,11 +2,12 @@ import React , {Component} from 'react';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import { ScrollView, SafeAreaView, View,Image } from 'react-native';
-
+import {P} from '../components/Text';
+import {BasicRow} from '../components/rows';
 
 import WeatherHeader from '../components/WeatherHeader';
 import WeatherForecast from '../components/WeatherForecast';
-import { groupForecastByDay, firstLetter } from '../util/function';
+import { groupForecastByDay, firstLetter, getSunsetRise } from '../util/function';
 import weatherApi from '../util/weatherApi';
 import {Container} from '../components/Container';
 
@@ -86,9 +87,11 @@ class Detail extends Component {
 			);
 		}
 			
-		const { weather, main, name } = this.state.currentWeather;
+		const { weather, main, name, sys, wind } = this.state.currentWeather;
+		const {sunset, sunrise} = sys;
 		// console.log(this.props.navigation.getParam('coords'))
 		// console.log(Date.now())
+		// console.log(getSunsetRise(sunset))
 		return (
 			<Container>
 				<ScrollView>
@@ -98,6 +101,38 @@ class Detail extends Component {
 						<WeatherForecast forecast={this.state.forecast} />
 						<View style={{	borderBottomColor: 'snow',borderBottomWidth: 1,width: '85%',marginTop: 20,alignSelf: 'center',}}/>
 					</SafeAreaView>
+
+					{/** Desplay hmmmmm other data */}
+					<BasicRow style={{justifyContent: 'space-between'}}>
+						<View style={{marginLeft:10, marginTop:10}}>
+							<P style={{fontWeight: '300', fontSize:12}} >Sunrise</P>
+							<P style={{fontSize:20}}>{getSunsetRise(sunrise)} AM</P>
+						</View>
+						<View style={{marginRight:10, marginTop:10}}>
+							<P style={{fontWeight: '300', fontSize:12}} >Sunset</P>
+							<P style={{fontSize:20}}>{getSunsetRise(sunset)} PM</P>
+						</View>
+					</BasicRow>
+					{/** end Desplay hmmmmm other data */}
+
+					<View style={{	borderBottomColor: 'snow',borderBottomWidth: 1,width: '85%',marginTop: 20,alignSelf: 'center',}}/>
+
+					<BasicRow>
+						<View style={{marginLeft:10, marginTop:10}}>
+							<P style={{fontSize:20}}>Wind</P>
+						</View>
+					</BasicRow>
+					<BasicRow style={{justifyContent: 'space-between',marginTop:1}}>
+						<View style={{marginLeft:10}}>
+							<P style={{fontWeight: '300', fontSize:12}} >Speed</P>
+							<P style={{fontSize:20}}>W {wind.speed} km/hr</P>
+						</View>
+						<View style={{marginRight:10}}>
+							<P style={{fontWeight: '300', fontSize:12}} >Deg</P>
+							<P style={{fontSize:20}}>{wind.deg}°</P>
+						</View>
+					</BasicRow>
+					<View style={{	borderBottomColor: 'snow',borderBottomWidth: 1,width: '85%',marginTop: 20,alignSelf: 'center',}}/>
 				</ScrollView>
 			</Container>
 		);

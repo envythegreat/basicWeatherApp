@@ -43,16 +43,16 @@ export default ScreenParams = {
               />
             </React.Fragment>
           ),
-          headerLeft: () => (
-            <React.Fragment>
-                <StatusBar barStyle="light-content" />
-                <HeaderRightButton
-                  icon={require('../assets/position.png')}
-                  onPress={() => navigation.navigate('Search')}
-                  style={{marginLeft: 10, width: 30, height:30}}
-                />
-              </React.Fragment>
-          ),
+          // headerLeft: () => (
+          //   <React.Fragment>
+          //       <StatusBar barStyle="light-content" />
+          //       <HeaderRightButton
+          //         icon={require('../assets/position.png')}
+          //         onPress={() => navigation.navigate('Search')}
+          //         style={{marginLeft: 10, width: 30, height:30}}
+          //       />
+          //     </React.Fragment>
+          // ),
           headerStyle: headerStyles,
           headerTransparent: {
             position: 'absolute',
