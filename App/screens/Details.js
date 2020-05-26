@@ -48,6 +48,7 @@ class Detail extends Component {
 	getCurrentWeather = ({ zipcode, coords}) => {
 		weatherApi('/weather', {zipcode, coords})
 			.then(response => {
+				console.log(response)
 				this.setState({
 					currentWeather: response,
 					loadingCurrentWeather: false,
@@ -95,6 +96,7 @@ class Detail extends Component {
 						<WeatherHeader weather={weather} name={name} main={main} firstLetter={firstLetter}  cityTitle={this.props.navigation.getParam('name')}/>
 						<View style={{	borderBottomColor: 'snow',borderBottomWidth: 1,width: '85%',marginTop: 20,alignSelf: 'center',}}/>
 						<WeatherForecast forecast={this.state.forecast} />
+						<View style={{	borderBottomColor: 'snow',borderBottomWidth: 1,width: '85%',marginTop: 20,alignSelf: 'center',}}/>
 					</SafeAreaView>
 				</ScrollView>
 			</Container>
